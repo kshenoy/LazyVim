@@ -2,18 +2,44 @@ return {
   {
     "folke/snacks.nvim",
     keys = {
-      { "<leader><leader>", function() Snacks.picker.buffers() end, desc = "Buffers", },
+      {
+        "<leader><leader>",
+        function()
+          Snacks.picker.buffers()
+        end,
+        desc = "Buffers",
+      },
       -- buffers
-      { "<leader>bb", function() Snacks.picker.buffers() end, desc = "Buffers", },
-      { "<leader>bB", function() Snacks.picker.buffers() end, desc = "Buffers (All)", },
+      {
+        "<leader>bb",
+        function()
+          Snacks.picker.buffers()
+        end,
+        desc = "Buffers",
+      },
       -- find
-      { "<leader>fb", false },
-      { "<leader>fB", false },
-      { "<leader>f.", LazyVim.pick("files", { root = false }), desc = "Find Files (cwd)" },
-      { "<leader>f,", LazyVim.pick.config_files(), desc = "Find Config File" },  -- ',' because MacOS uses it for settings
-      { "<leader>fc", false },
+      {
+        "<leader>f.",
+        function()
+          LazyVim.pick("files", { root = false })()
+        end,
+        desc = "Find Files (cwd)",
+      }, -- '.' because it refers to cwd in Unix
+      {
+        "<leader>f,",
+        function()
+          LazyVim.pick.config_files()()
+        end,
+        desc = "Find Config File",
+      }, -- ',' because MacOS uses it for settings
       -- search
-      { "<leader>s.", LazyVim.pick("live_grep", { root = false }), desc = "Grep (cwd)" },
+      {
+        "<leader>s.",
+        function()
+          LazyVim.pick("live_grep", { root = false })()
+        end,
+        desc = "Grep (cwd)",
+      }, -- '.' because it refers to cwd in Unix
     },
   },
 }
