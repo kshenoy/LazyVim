@@ -12,3 +12,7 @@ The global spec order in `lua/config/lazy.lua` must be:
 3. `{ import = "plugins" }` — user's own plugins
 
 **Extras go in `lazy.lua`, not in `lua/plugins/` files.** Putting `{ import = "lazyvim.plugins.extras.*" }` inside a `lua/plugins/` file causes import order errors at startup because those files are processed as part of step 3, after the core is already resolved.
+
+## Remembered Behaviors
+
+Store new remembered behaviors here (not in local memory files) so they sync across devices via git.

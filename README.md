@@ -21,7 +21,7 @@ lazy.nvim plugin specs. Multiple files are merged together. Use to add new plugi
 
 ### Keymap namespaces
 
-`<leader>m` is the personal keymap namespace ("m" for *mine*). Use `<leader>m<key>` for custom keymaps that don't belong to an existing LazyVim namespace.
+`<leader>m` is the personal keymap namespace ("m" for *mine*). Use `<leader>m<key>` for custom keymaps that don't belong to an existing LazyVim namespace. The group is registered in `lua/plugins/which-key.lua` with label `personal` and icon `󰀄`.
 
 ---
 
@@ -36,8 +36,8 @@ lazy.nvim plugin specs. Multiple files are merged together. Use to add new plugi
 | `<C-R>` | n | Undo line (original `U` behaviour) |
 | `cw` / `cW` | n | Change word/WORD to end-of-word (fixes vim's trailing-space inconsistency, see `:h cw`) |
 | `c*` / `cg*` | n | Replace word under cursor; use `.` to repeat on next match |
-| `<C-G>` | n | Show full absolute file path (`2<C-G>`) |
 | `<leader>fy` | n | Copy full file path to clipboard |
+| `<leader>mf` | n | Fill remainder of line to `textwidth` with a prompted character |
 | `<leader>u_` | n | Toggle `cursorline` |
 | `<leader>u\|` | n | Toggle `cursorcolumn` |
 
@@ -61,10 +61,6 @@ lazy.nvim plugin specs. Multiple files are merged together. Use to add new plugi
 | `<leader>s.` | Grep (cwd) (`.` refers to cwd in Unix) |
 
 ---
-
-## TODO
-
-- Port `fill_width` from kickstart (`<leader>mf`) — fills the rest of the line to `textwidth` with a prompted character. Needs the function inlined into `lua/config/keymaps.lua` (no utils module in LazyVim config).
 
 ## Deferred from kickstart (not yet ported)
 

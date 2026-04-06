@@ -34,3 +34,13 @@ end, { desc = "Copy file path" })
 -- Mnemonic: _ looks like a horizontal line (cursorline), | like a vertical one (cursorcolumn).
 Snacks.toggle.option("cursorline", { name = "Cursorline" }):map("<leader>u_")
 Snacks.toggle.option("cursorcolumn", { name = "Cursorcolumn" }):map("<leader>u|")
+
+-- Fill remainder of current line up to 'textwidth' with a prompted character.
+-- Usage: <leader>mf, then press the fill character (e.g. '-', '=').
+vim.keymap.set("n", "<leader>mf", function()
+  local fill_char = vim.fn.nr2char(vim.fn.getchar())
+  local fill_amt = vim.opt.textwidth:get() - vim.api.nvim_get_current_line():len()
+  local fill_str = string.rep(fill_char, fill_amt)
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, { fill_str })
+end, { desc = "Fill-width with character" })
