@@ -21,9 +21,9 @@ return {
       {
         "<leader>f.",
         function()
-          LazyVim.pick("files", { root = false })()
+          LazyVim.pick("files", { root = false, cwd = vim.fn.expand("%:p:h") })()
         end,
-        desc = "Find Files (cwd)",
+        desc = "Find Files (file dir)",
       }, -- '.' because it refers to cwd in Unix
       {
         "<leader>f,",
@@ -36,9 +36,9 @@ return {
       {
         "<leader>s.",
         function()
-          LazyVim.pick("live_grep", { root = false })()
+          LazyVim.pick("live_grep", { root = false, cwd = vim.fn.expand("%:p:h") })()
         end,
-        desc = "Grep (cwd)",
+        desc = "Grep (file dir)",
       }, -- '.' because it refers to cwd in Unix
     },
   },

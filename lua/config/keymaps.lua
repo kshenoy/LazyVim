@@ -2,6 +2,12 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
+-- Unbind C-h/j/k/l window switching (LazyVim defaults)
+vim.keymap.del("n", "<C-h>")
+vim.keymap.del("n", "<C-j>")
+vim.keymap.del("n", "<C-k>")
+vim.keymap.del("n", "<C-l>")
+
 -- Quit all files without saving; counterpart to 'ZZ'
 vim.keymap.set("n", "ZQ", "<cmd>qall!<cr>", { desc = "Quit all without saving" })
 
