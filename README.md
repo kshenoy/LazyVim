@@ -19,6 +19,10 @@ lazy.nvim plugin specs. Multiple files are merged together. Use to add new plugi
 
 **Rule of thumb:** If it's a `vim.*` call that doesn't depend on a plugin, it goes in `lua/config/`. If it involves configuring a plugin, it goes in `lua/plugins/`.
 
+### Keymap namespaces
+
+`<leader>m` is the personal keymap namespace ("m" for *mine*). Use `<leader>m<key>` for custom keymaps that don't belong to an existing LazyVim namespace.
+
 ---
 
 ## Customizations over the starter
@@ -27,12 +31,25 @@ lazy.nvim plugin specs. Multiple files are merged together. Use to add new plugi
 | Key | Mode | Description |
 |-----|------|-------------|
 | `ZQ` | n | Quit all without saving (`qall!`) |
+| `gj` / `gk` | n, x | Down/Up by real line (inverse of LazyVim's `j`/`k` → `gj`/`gk` remap) |
+| `U` | n | Redo (swapped with `<C-R>` for ergonomics) |
+| `<C-R>` | n | Undo line (original `U` behaviour) |
+| `cw` / `cW` | n | Change word/WORD to end-of-word (fixes vim's trailing-space inconsistency, see `:h cw`) |
+| `c*` / `cg*` | n | Replace word under cursor; use `.` to repeat on next match |
+| `<C-G>` | n | Show full absolute file path (`2<C-G>`) |
+| `<leader>fy` | n | Copy full file path to clipboard |
+| `<leader>u_` | n | Toggle `cursorline` |
+| `<leader>u\|` | n | Toggle `cursorcolumn` |
 
 ### Colorscheme (`lua/plugins/colorscheme.lua`)
 - Uses **catppuccin-frappe** instead of the default tokyonight
 
 ### UI (`lua/plugins/ui.lua`)
 - Disables **bufferline** (`akinsho/bufferline.nvim`)
+
+### Plugins (`lua/plugins/editor.lua`)
+- **dial.nvim** (LazyVim extra) — extends `<C-a>`/`<C-x>` with booleans, dates, hex colours, weekdays, semver, and custom `.`/`->`/`::` cycling. Replaces kickstart's `boole.nvim`.
+- **mini.surround** (LazyVim extra) — surround operations via `gs*` keys: `gsa` add, `gsd` delete, `gsr` replace, `gsf`/`gsF` find, `gsh` highlight, `gsn` n_lines.
 
 ### Snacks (`lua/plugins/snacks.lua`)
 | Key | Description |
@@ -42,3 +59,18 @@ lazy.nvim plugin specs. Multiple files are merged together. Use to add new plugi
 | `<leader>f.` | Find Files (cwd) (`.` refers to cwd in Unix) |
 | `<leader>f,` | Find Config File (`,` used because macOS reserves it for Settings) |
 | `<leader>s.` | Grep (cwd) (`.` refers to cwd in Unix) |
+
+---
+
+## TODO
+
+- Port `fill_width` from kickstart (`<leader>mf`) — fills the rest of the line to `textwidth` with a prompted character. Needs the function inlined into `lua/config/keymaps.lua` (no utils module in LazyVim config).
+
+## Deferred from kickstart (not yet ported)
+
+| Plugin | Notes |
+|--------|-------|
+| `tpope/vim-sleuth` | Auto-detects indent from file content. Neovim 0.9+ has built-in editorconfig; revisit if needed on projects without `.editorconfig`. |
+| `echasnovski/mini.align` | Text alignment operations. No LazyVim equivalent. |
+| `echasnovski/mini.bracketed` | Bracket-based navigation. No LazyVim equivalent. |
+| `echasnovski/mini.operators` | Extra operators. No LazyVim equivalent. |
