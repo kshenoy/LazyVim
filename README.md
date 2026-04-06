@@ -41,6 +41,23 @@ lazy.nvim plugin specs. Multiple files are merged together. Use to add new plugi
 | `<leader>u_` | n | Toggle `cursorline` |
 | `<leader>u\|` | n | Toggle `cursorcolumn` |
 
+### Options (`lua/config/options.lua`)
+| Option | Value | Notes |
+|--------|-------|-------|
+| `hlsearch` | `true` | Highlight all search matches |
+| `grepprg` | `rg --vimgrep --smart-case` | Adds `--smart-case` to LazyVim's default ripgrep cmd |
+| `breakindent` | `true` | Wrapped lines preserve visual indent level |
+| `showbreak` | `↪` | Prefix shown at the start of wrapped lines |
+| `conceallevel` | `2` | Hide concealed text (e.g. markdown bold/italic markers) |
+| `concealcursor` | `nc` | Also conceal on cursor line in normal and command modes |
+| `textwidth` | `120` | Line length above which to break a line |
+| `colorcolumn` | `+1` | Highlight column 121 (textwidth + 1) |
+| `softtabstop` | `-1` | Use `shiftwidth` value for `<Tab>` in insert mode |
+| `inccommand` | `split` | Show live `:s/` preview in a split (LazyVim default: `nosplit`) |
+| `undofile` | `true` | Persist undo history across sessions |
+| `swapfile` | `false` | No swap files; `undofile` is sufficient |
+| `listchars` | `tab:» trail:· nbsp:␣ extends:› precedes:‹` | Visible whitespace + horizontal overflow indicators |
+
 ### Colorscheme (`lua/plugins/colorscheme.lua`)
 - Uses **catppuccin-frappe** instead of the default tokyonight
 
