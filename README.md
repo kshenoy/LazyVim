@@ -87,3 +87,5 @@ lazy.nvim plugin specs. Multiple files are merged together. Use to add new plugi
 | `echasnovski/mini.align` | Text alignment operations. No LazyVim equivalent. |
 | `echasnovski/mini.bracketed` | Bracket-based navigation. No LazyVim equivalent. |
 | `echasnovski/mini.operators` | Extra operators. No LazyVim equivalent. |
+| Exchange operator | Swap two regions of text. Candidates: `mini.operators` (includes exchange), `vim-exchange`. |
+| Argument motion | Shift/move function arguments. Candidates: `mini.operators`, `sideways.vim`, `vim-argswap`. |

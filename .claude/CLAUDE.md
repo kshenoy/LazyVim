@@ -2,7 +2,7 @@
 
 ## Getting context
 
-Read `README.md` at the start of any session — it documents current customizations, the keymap namespace convention, and what's been deferred from the kickstart migration.
+Read `README.md` at the start of any session — it documents current customizations, the keymap namespace convention, and deferred plugins.
 
 ## LazyVim import order
 
