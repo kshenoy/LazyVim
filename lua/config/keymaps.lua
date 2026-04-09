@@ -26,6 +26,10 @@ vim.keymap.set("n", "<C-R>", "U", { silent = true, desc = "Undo line" })
 vim.keymap.set("n", "cw", "dwi", { desc = "Change word" })
 vim.keymap.set("n", "cW", "dWi", { desc = "Change WORD" })
 
+-- Verymagic search: prepend \v so extended regex is always active
+vim.keymap.set("n", "/", "/\\v", { desc = "Search (verymagic)" })
+vim.keymap.set("n", "?", "?\\v", { desc = "Search back (verymagic)" })
+
 -- Replace word under cursor
 -- Jumps to the first match, then enters cgn so the change can be repeated with . on subsequent matches
 vim.keymap.set("n", "c*", "*<C-O>cgn", { desc = "Replace word under cursor" })

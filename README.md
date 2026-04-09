@@ -36,10 +36,12 @@ lazy.nvim plugin specs. Multiple files are merged together. Use to add new plugi
 | `<C-R>` | n | Undo line (original `U` behaviour) |
 | `cw` / `cW` | n | Change word/WORD to end-of-word (fixes vim's trailing-space inconsistency, see `:h cw`) |
 | `c*` / `cg*` | n | Replace word under cursor; use `.` to repeat on next match |
-| `<leader>fy` | n | Copy full file path to clipboard |
+| `/` / `?` | n | Search / search back with verymagic (`\v`) always active |
+| `<leader>fy` | n | Copy full file path to clipboard (both `+` and `*` registers) |
 | `<leader>mf` | n | Fill remainder of line to `textwidth` with a prompted character |
 | `<leader>u_` | n | Toggle `cursorline` |
 | `<leader>u\|` | n | Toggle `cursorcolumn` |
+| `<C-h/j/k/l>` | n | **Unbound** (LazyVim's window-switching defaults removed) |
 
 ### Options (`lua/config/options.lua`)
 | Option | Value | Notes |
@@ -68,14 +70,47 @@ lazy.nvim plugin specs. Multiple files are merged together. Use to add new plugi
 - **dial.nvim** (LazyVim extra) — extends `<C-a>`/`<C-x>` with booleans, dates, hex colours, weekdays, semver, and custom `.`/`->`/`::` cycling. Replaces kickstart's `boole.nvim`.
 - **mini.surround** (LazyVim extra) — surround operations via `gs*` keys: `gsa` add, `gsd` delete, `gsr` replace, `gsf`/`gsF` find, `gsh` highlight, `gsn` n_lines.
 
+### Merge tool (`lua/plugins/merge.lua`)
+
+Always-loaded plugin providing a `:MergeInit` command for 4-way merges. Auto-detects VCS at invocation time.
+
+**Layout (7 tabs):**
+| Tab | Windows |
+|-----|---------|
+| Main | BASE \| REMOTE \| LOCAL (top), MERGED (bottom) — all diffed |
+| 2 | REMOTE \| MERGED \| LOCAL (3-way) |
+| 3–7 | Pairwise diffs: L↔M, R↔M, B↔R, B↔L, R↔L |
+
+Buffer-local keymaps for conflict navigation, text objects, and accept-block operations are documented in `lua/plugins/merge.lua`.
+
+**Usage:**
+```sh
+# Git
+git config mergetool.nvim.cmd 'nvim -c MergeInit "$BASE" "$REMOTE" "$LOCAL" "$MERGED"'
+git config merge.tool nvim
+
+# Perforce
+nvim -c MergeInit "$ORIGINAL" "$THEIRS" "$YOURS" "$MERGE"
+```
+
+### Minimal init (`init-min.lua`)
+
+Lightweight LazyVim config for diffs and merges — loads only snacks, gitsigns, lualine, mini.icons, which-key, mini.pairs, mini.ai, conform, and tokyonight. Reuses the existing plugin installation.
+
+```sh
+NVIM_APPNAME=nvim-LazyVim nvim -u ~/.config/nvim-LazyVim/init-min.lua [files]
+# As merge tool:
+NVIM_APPNAME=nvim-LazyVim nvim -u ~/.config/nvim-LazyVim/init-min.lua -c MergeInit "$BASE" "$REMOTE" "$LOCAL" "$MERGED"
+```
+
 ### Snacks (`lua/plugins/snacks.lua`)
 | Key | Description |
 |-----|-------------|
 | `<leader><leader>` | Buffers picker |
 | `<leader>bb` | Buffers picker (overrides default "Switch to Other Buffer") |
-| `<leader>f.` | Find Files (cwd) (`.` refers to cwd in Unix) |
+| `<leader>f.` | Find Files (file dir) — scoped to directory of current buffer |
 | `<leader>f,` | Find Config File (`,` used because macOS reserves it for Settings) |
-| `<leader>s.` | Grep (cwd) (`.` refers to cwd in Unix) |
+| `<leader>s.` | Grep (file dir) — scoped to directory of current buffer |
 
 ---
 

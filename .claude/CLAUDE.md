@@ -1,8 +1,10 @@
 # Claude Instructions for nvim-LazyVim
 
-## Getting context
+## Remembered Behaviors
 
-Read `README.md` at the start of any session — it documents current customizations, the keymap namespace convention, and deferred plugins.
+- Store new remembered behaviors here (not in local memory files) so they sync across devices via git.
+- Read `README.md` at the start of any session — it documents current customizations, the keymap namespace convention, and deferred plugins.
+- After any change to keymaps, options, plugins, or config structure: update `README.md` so it stays accurate as the single source of truth for all differences from the LazyVim starter.
 
 ## LazyVim import order
 
@@ -22,13 +24,4 @@ Never use `condition and value or nil` inline inside the lazy.nvim spec table. `
 - Lives in `lua/work/` (symlinked to `~/.config/dotfiles-priv/nvim/work/`), gitignored
 - Loaded only when `$STEM` is set, via conditional `table.insert` in `lazy.lua`
 - LazyVim extras (e.g. clangd) must still go in `lazy.lua` — extras inside `lua/work/` cause import order errors
-
-## Key files
-
-- `lua/plugins/merge.lua` — 4-way MergeInit command; always loaded; supports git/git-diff3/perforce auto-detected at invocation time
-- `init-min.lua` — minimal LazyVim-based config for diffs/merges; invoke with `NVIM_APPNAME=nvim-LazyVim nvim -u ~/.config/nvim-LazyVim/init-min.lua`; reuses the existing plugin installation
 - `lua/work/` files must each `return {}` or a valid spec table — returning `nil` causes a lazy startup error
-
-## Remembered Behaviors
-
-Store new remembered behaviors here (not in local memory files) so they sync across devices via git.
