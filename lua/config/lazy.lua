@@ -14,18 +14,23 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+local spec = {
+  -- add LazyVim and import its plugins
+  { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+  -- import LazyVim extras (must come after lazyvim.plugins, before user plugins)
+  { import = "lazyvim.plugins.extras.editor.dial" },
+  { import = "lazyvim.plugins.extras.coding.mini-surround" },
+}
+if vim.env.STEM then
+  table.insert(spec, { import = "lazyvim.plugins.extras.lang.clangd" })
+end
+table.insert(spec, { import = "plugins" })
+if vim.env.STEM then
+  table.insert(spec, { import = "work" })
+end
+
 require("lazy").setup({
-  spec = {
-    -- add LazyVim and import its plugins
-    { "LazyVim/LazyVim", import = "lazyvim.plugins" },
-    -- import LazyVim extras (must come after lazyvim.plugins, before user plugins)
-    { import = "lazyvim.plugins.extras.editor.dial" },
-    { import = "lazyvim.plugins.extras.coding.mini-surround" },
-    -- import/override with your plugins
-    { import = "plugins" },
-    -- work-specific plugins (only loaded when $STEM is set)
-    vim.env.STEM and { import = "work" } or nil,
-  },
+  spec = spec,
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
     -- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.

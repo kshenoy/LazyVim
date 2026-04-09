@@ -34,6 +34,7 @@ vim.keymap.set("n", "cg*", "g*<C-O>cgn", { desc = "Replace word under cursor (no
 -- Copy full file path to clipboard
 vim.keymap.set("n", "<leader>fy", function()
   vim.fn.setreg("+", vim.fn.expand("%:p"))
+  vim.fn.setreg("*", vim.fn.expand("%:p"))
 end, { desc = "Copy file path" })
 
 -- Toggle cursorline/cursorcolumn
