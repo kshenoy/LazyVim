@@ -251,6 +251,18 @@ local function create_merge_maps(bufnr)
   end
 end
 
+-- Generate tabline from guitablabel tab-local vars (for terminal Neovim)
+local function merge_tabline()
+  local s = ''
+  local cur = vim.fn.tabpagenr()
+  for i = 1, vim.fn.tabpagenr('$') do
+    local hl = (i == cur) and '%#TabLineSel#' or '%#TabLine#'
+    local label = vim.fn.gettabvar(i, 'guitablabel', tostring(i))
+    s = s .. hl .. '%' .. i .. 'T ' .. label .. ' '
+  end
+  return s .. '%#TabLineFill#%T'
+end
+
 -- Helper: open a two-window diff tab using buffer numbers (avoids path-matching issues)
 local function diff_tab(label, file_a, file_b)
   local bna = vim.fn.bufnr(file_a)
@@ -302,6 +314,11 @@ local function setup_merge_layout()
   diff_tab(R .. ' v/s ' .. L, remote, local_)
 
   vim.cmd('silent! tabdo wincmd = | silent! tabfirst')
+
+  -- Set tabline to show guitablabel values (terminal Neovim doesn't read guitablabel natively)
+  _G._merge_tabline = merge_tabline
+  vim.opt.tabline = '%!v:lua._merge_tabline()'
+
 end
 
 -- Entry point

@@ -15,6 +15,8 @@
 vim.opt.diffopt     = 'filler,context:5,algorithm:patience,linematch:60'
 vim.opt.showtabline = 2
 
+vim.keymap.set('n', 'ZQ', '<cmd>qall!<cr>', { desc = 'Quit all without saving' })
+
 -- ── Bootstrap lazy.nvim ───────────────────────────────────────────────────────
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.uv.fs_stat(lazypath) then
