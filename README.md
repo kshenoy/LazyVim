@@ -104,13 +104,19 @@ NVIM_APPNAME=nvim-LazyVim nvim -u ~/.config/nvim-LazyVim/init-min.lua -c MergeIn
 ```
 
 ### Snacks (`lua/plugins/snacks.lua`)
+
+Uppercase cwd variants are repurposed to scope to the **directory of the current file** instead
+(since root dir = cwd almost always, the cwd variants were redundant otherwise).
+
 | Key | Description |
 |-----|-------------|
 | `<leader><leader>` | Buffers picker |
 | `<leader>bb` | Buffers picker (overrides default "Switch to Other Buffer") |
-| `<leader>f.` | Find Files (file dir) — scoped to directory of current buffer |
 | `<leader>f,` | Find Config File (`,` used because macOS reserves it for Settings) |
-| `<leader>s.` | Grep (file dir) — scoped to directory of current buffer |
+| `<leader>fF` | Find Files (file dir) — scoped to directory of current buffer |
+| `<leader>sG` | Grep (file dir) — scoped to directory of current buffer |
+| `<leader>sW` | Visual selection or word (file dir) — scoped to directory of current buffer |
+| `<leader>fE` / `<leader>E` | Explorer Snacks (file dir) — opens at directory of current buffer |
 
 ---
 
