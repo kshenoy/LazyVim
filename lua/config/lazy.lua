@@ -25,8 +25,9 @@ if vim.env.STEM then
   table.insert(spec, { import = "lazyvim.plugins.extras.lang.clangd" })
 end
 table.insert(spec, { import = "plugins" })
-if vim.env.STEM then
-  table.insert(spec, { import = "work" })
+local localpath = vim.fn.stdpath("config") .. "/lua/local"
+if (vim.uv or vim.loop).fs_stat(localpath) then
+  table.insert(spec, { import = "local" })
 end
 
 require("lazy").setup({

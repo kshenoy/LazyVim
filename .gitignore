@@ -6,4 +6,4 @@ debug
 foo.*
 *.log
 data
-lua/work
+lua/local

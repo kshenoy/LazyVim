@@ -6,6 +6,21 @@
 - Read `README.md` at the start of any session — it documents current customizations, the keymap namespace convention, and deferred plugins.
 - After any change to keymaps, options, plugins, or config structure: update `README.md` so it stays accurate as the single source of truth for all differences from the LazyVim starter.
 
+## README TODO format
+
+When documenting in-progress work in `README.md`, use this format (placed after the main section content):
+
+```
+#### TODO <short description>
+
+<problem statement paragraph>
+
+**Status**
+<current status / what's been tried / what's pending>
+```
+
+Remove the TODO once resolved
+
 ## LazyVim import order
 
 The global spec order in `lua/config/lazy.lua` must be:
@@ -19,9 +34,8 @@ The global spec order in `lua/config/lazy.lua` must be:
 
 Never use `condition and value or nil` inline inside the lazy.nvim spec table. `ipairs()` stops at the first `nil`, silently skipping all subsequent entries (including `{ import = "plugins" }`). Use `table.insert()` conditionally instead — see `lua/config/lazy.lua` for the pattern.
 
-## Work-specific config
+## Local/machine-specific config
 
-- Lives in `lua/work/` (symlinked to `~/.config/dotfiles-priv/nvim/work/`), gitignored
-- Loaded only when `$STEM` is set, via conditional `table.insert` in `lazy.lua`
-- LazyVim extras (e.g. clangd) must still go in `lazy.lua` — extras inside `lua/work/` cause import order errors
-- `lua/work/` files must each `return {}` or a valid spec table — returning `nil` causes a lazy startup error
+See `README.md` for the full convention. Key constraints:
+- LazyVim extras must still go in `lazy.lua` — extras inside `lua/local/` cause import order errors
+- Files in `lua/local/` must each `return {}` or a valid spec table — returning `nil` causes a lazy startup error

@@ -12,6 +12,11 @@ Neovim-level configuration, auto-loaded by LazyVim at the appropriate time. Do *
 - `autocmds.lua` — `vim.api.nvim_create_autocmd(...)` calls
 - `lazy.lua` — lazy.nvim bootstrap (don't touch)
 
+### `lua/local/`
+Gitignored symlink pointing to machine-specific settings (e.g. at work → `dotfiles-priv/nvim/work/`).
+Loaded automatically by `lazy.lua` if the symlink exists — no env var needed.
+See `lua/local/README.md` (in the symlink target) for what that machine's local config contains.
+
 ### `lua/plugins/`
 lazy.nvim plugin specs. Multiple files are merged together. Use to add new plugins or override/extend existing LazyVim plugins.
 
