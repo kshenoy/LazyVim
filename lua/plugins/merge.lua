@@ -8,9 +8,9 @@
 --
 -- Layout:
 --   Tab 1 (Main):  BASE   | REMOTE | LOCAL (top), MERGED (bottom) — all diffed
---   Tab 2:         REMOTE | MERGED | LOCAL (3-way)
---   Tab 3:         LOCAL  | MERGED
---   Tab 4:         REMOTE | MERGED
+--   Tab 2:         REMOTE | LOCAL (top), MERGED (bottom)
+--   Tab 3:         REMOTE | MERGED
+--   Tab 4:         LOCAL  | MERGED
 --   Tab 5:         BASE   | REMOTE
 --   Tab 6:         BASE   | LOCAL
 --   Tab 7:         REMOTE | LOCAL
@@ -21,25 +21,27 @@
 --   Perforce:  >>>> ORIGINAL / ==== THEIRS / ==== YOURS / <<<<
 --
 -- Keymaps (buffer-local on the merge file):
---   [C / ]C         previous / next conflict marker
---   iC / aC         text object: whole conflict block (inner/around)
---   Git (default):       Git (diff3):         Perforce:
---   ilC/alC (Local)      ilC/alC (Local)      ioC/aoC (Original)
---   irC/arC (Remote)     ibC/abC (Base)       itC/atC (Theirs)
---                        irC/arC (Remote)     iyC/ayC (Yours)
---   dgl (accept Local)   dgl (accept Local)   dgo (accept Orig)
---   dgr (accept Remote)  dgb (accept Base)    dgt (accept Theirs)
---                        dgr (accept Remote)  dgy (accept Yours)
+--   [C  / ]C     previous / next conflict marker
+--   iC  / aC     text object: whole conflict block (inner/around)
+--   ibC / abC    text object: Base   (Original) conflict block (inner/around) - only on Git (diff3) and Perforce
+--   ilC / alC    text object: Local  (Yours)    conflict block (inner/around)
+--   irC / arC    text object: Remote (Theirs)   conflict block (inner/around)
+--   dgb          accept Base   (Original) - only on Git (diff3) and Perforce
+--   dgl          accept Local  (Yours)
+--   dgr          accept Remote (Theirs)
 
 -- Module-level context: populated by setup_ctx() at MergeInit time
 local ctx = {}
 
 -- Detect VCS type from environment and merge file content
 local function detect_vcs(merge_file)
-  -- Perforce: $STEM is set in all Perforce work areas
-  if vim.env.STEM and vim.env.STEM ~= '' then return 'perforce' end
-  -- Git diff3: scan for the base marker (||||||| ) in the merge file
-  for _, line in ipairs(vim.fn.readfile(merge_file, '', 200)) do
+  local lines = vim.fn.readfile(merge_file, '', 200)
+  -- Perforce: unique '>>>> ORIGINAL' marker
+  for _, line in ipairs(lines) do
+    if line:match('^>>>> ORIGINAL') then return 'perforce' end
+  end
+  -- Git diff3: base marker '||||||| '
+  for _, line in ipairs(lines) do
     if line:match('^|||||||') then return 'git_diff3' end
   end
   return 'git'
@@ -54,7 +56,7 @@ local function setup_ctx(vcs)
       local_str   = 'Yours',    merge_str  = 'Merged',
       three_block = true,
       P = { b1 = '^>>>> ORIGINAL', b2 = '^==== THEIRS', b3 = '^==== YOURS', end_ = '^<<<<' },
-      keys  = { [1] = 'o',        [2] = 't',      [3] = 'y'     },
+      keys  = { [1] = 'b',        [2] = 'r',      [3] = 'l'     },
       names = { [1] = 'Original', [2] = 'Theirs', [3] = 'Yours' },
     }
   elseif vcs == 'git_diff3' then
@@ -299,16 +301,20 @@ local function setup_merge_layout()
   vim.cmd('silent! windo diffthis')
   vim.t.guitablabel = 'Main'
 
-  -- Tab 2: REMOTE | MERGED | LOCAL (3-way)
-  vim.cmd('silent! tabe | silent! b ' .. vim.fn.bufnr(remote))
-  vim.cmd('silent! wincmd v | silent! b ' .. vim.fn.bufnr(merged))
+  -- Tab 2: REMOTE | LOCAL (top) + MERGED (bottom)
+  vim.cmd('silent! tabe | silent! b ' .. vim.fn.bufnr(merged))
+  vim.bo.readonly   = false
+  vim.bo.modifiable = true
+  vim.cmd('silent! wincmd s')   -- merged to bottom
+  vim.cmd('silent! wincmd t')   -- cursor to top-left
+  vim.cmd('silent! b ' .. vim.fn.bufnr(remote))
   vim.cmd('silent! wincmd v | silent! b ' .. vim.fn.bufnr(local_))
   vim.cmd('silent! windo diffthis | silent! wincmd h')
   vim.t.guitablabel = R .. ' v/s ' .. M .. ' v/s ' .. L
 
   -- Tabs 3–7: pairwise diffs
-  diff_tab(L .. ' v/s ' .. M, local_, merged)
   diff_tab(R .. ' v/s ' .. M, remote, merged)
+  diff_tab(L .. ' v/s ' .. M, local_, merged)
   diff_tab(B .. ' v/s ' .. R, base,   remote)
   diff_tab(B .. ' v/s ' .. L, base,   local_)
   diff_tab(R .. ' v/s ' .. L, remote, local_)
@@ -319,6 +325,22 @@ local function setup_merge_layout()
   _G._merge_tabline = merge_tabline
   vim.opt.tabline = '%!v:lua._merge_tabline()'
 
+  -- Set per-window statuslines so each split shows its own buffer name.
+  -- Neovim sets g:statusline_winid before evaluating %{...}, so we use it to read b:bufname
+  -- (or the filename) for the window being drawn rather than the active window.
+  -- laststatus=2 is set later via a VeryLazy autocmd (after lualine resets it to 3).
+  _G._merge_sl_label = function()
+    local winid = vim.g.statusline_winid
+    if not winid or winid == 0 or not vim.api.nvim_win_is_valid(winid) then return '' end
+    local buf = vim.api.nvim_win_get_buf(winid)
+    return vim.b[buf].bufname or vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ':t')
+  end
+  local sl = ' %{v:lua._merge_sl_label()} %=%m%r %l:%c '
+  for _, tabnr in ipairs(vim.api.nvim_list_tabpages()) do
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(tabnr)) do
+      vim.api.nvim_set_option_value('statusline', sl, { win = win })
+    end
+  end
 end
 
 -- Entry point
@@ -332,6 +354,13 @@ local function merge_init()
   setup_ctx(vcs)
   vim.notify('Merge mode: ' .. vcs, vim.log.levels.INFO)
   setup_merge_layout()
+  -- lualine's config runs on VeryLazy and resets laststatus to 3; restore it afterwards.
+  -- Our autocmd is registered after lazy.nvim's plugin-loading autocmds, so it fires last.
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'VeryLazy',
+    once = true,
+    callback = function() vim.opt.laststatus = 2 end,
+  })
   -- Navigate to the merge buffer (bottom split of tab 1) and set keymaps there
   vim.cmd('wincmd b')
   create_merge_maps(vim.api.nvim_get_current_buf())
