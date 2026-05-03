@@ -2,33 +2,11 @@ return {
   {
     "folke/snacks.nvim",
     keys = {
-      {
-        "<leader><leader>",
-        function()
-          Snacks.picker.buffers()
-        end,
-        desc = "Buffers",
-      },
-      -- buffers
-      {
-        "<leader>bb",
-        function()
-          Snacks.picker.buffers()
-        end,
-        desc = "Buffers",
-      },
       -- find
-      {
-        "<leader>f,",
-        function()
-          LazyVim.pick.config_files()()
-        end,
-        desc = "Find Config File",
-      }, -- ',' because MacOS uses it for settings
       {
         "<leader>fF",
         function()
-          LazyVim.pick("files", { root = false, cwd = vim.fn.expand("%:p:h") })()
+          LazyVim.pick("files", { root = false, cwd = vim.fn.expand("%:p:h"), filter = { cwd = true } })()
         end,
         desc = "Find Files (file dir)",
       },
@@ -36,14 +14,14 @@ return {
       {
         "<leader>sG",
         function()
-          LazyVim.pick("live_grep", { root = false, cwd = vim.fn.expand("%:p:h") })()
+          LazyVim.pick("live_grep", { root = false, cwd = vim.fn.expand("%:p:h"), filter = { cwd = true } })()
         end,
         desc = "Grep (file dir)",
       },
       {
         "<leader>sW",
         function()
-          LazyVim.pick("grep_word", { root = false, cwd = vim.fn.expand("%:p:h") })()
+          LazyVim.pick("grep_word", { root = false, cwd = vim.fn.expand("%:p:h"), filter = { cwd = true } })()
         end,
         desc = "Visual selection or word (file dir)",
         mode = { "n", "x" },

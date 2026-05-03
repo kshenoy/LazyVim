@@ -1,8 +1,9 @@
-# Claude Instructions for nvim-LazyVim
+# Instructions
+
+This repo is based on LazyVim
 
 ## Remembered Behaviors
 
-- Store new remembered behaviors here (not in local memory files) so they sync across devices via git.
 - Read `README.md` at the start of any session — it documents current customizations, the keymap namespace convention, and deferred plugins.
 - After any change to keymaps, options, plugins, or config structure: update `README.md` so it stays accurate as the single source of truth for all differences from the LazyVim starter.
 

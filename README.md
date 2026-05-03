@@ -52,7 +52,7 @@ lazy.nvim plugin specs. Multiple files are merged together. Use to add new plugi
 | Option | Value | Notes |
 |--------|-------|-------|
 | `hlsearch` | `true` | Highlight all search matches |
-| `grepprg` | `rg --vimgrep --smart-case` | Adds `--smart-case` to LazyVim's default ripgrep cmd |
+| `grepprg` | `rg --vimgrep --smart-case` | Appends `--smart-case` to LazyVim's default ripgrep cmd |
 | `breakindent` | `true` | Wrapped lines preserve visual indent level |
 | `showbreak` | `↪` | Prefix shown at the start of wrapped lines |
 | `conceallevel` | `2` | Hide concealed text (e.g. markdown bold/italic markers) |
@@ -75,14 +75,14 @@ lazy.nvim plugin specs. Multiple files are merged together. Use to add new plugi
 - **dial.nvim** (LazyVim extra) — extends `<C-a>`/`<C-x>` with booleans, dates, hex colours, weekdays, semver, and custom `.`/`->`/`::` cycling. Replaces kickstart's `boole.nvim`.
 - **mini.surround** (LazyVim extra) — surround operations via `gs*` keys: `gsa` add, `gsd` delete, `gsr` replace, `gsf`/`gsF` find, `gsh` highlight, `gsn` n_lines.
 
-### Merge tool (`lua/plugins/merge.lua`)
+### Custom diff/merge (`lua/config/autocmds.lua`, `lua/plugins/merge.lua`)
 
-Always-loaded plugin providing a `:MergeInit` command for 4-way merges. Auto-detects VCS at invocation time.
+Custom `:MergeInit` command for 4-way merges. Auto-detects VCS at invocation time by checking conflict markers in files.
 
-**Layout (7 tabs):**
+**Layout (7 tabs)**
 | Tab | Windows |
 |-----|---------|
-| Main | BASE \| REMOTE \| LOCAL (top), MERGED (bottom) — all diffed |
+| 1 | BASE \| REMOTE \| LOCAL (top), MERGED (bottom) — all diffed |
 | 2 | REMOTE \| MERGED \| LOCAL (3-way) |
 | 3–7 | Pairwise diffs: L↔M, R↔M, B↔R, B↔L, R↔L |
 
@@ -110,14 +110,11 @@ NVIM_APPNAME=nvim-LazyVim nvim -u ~/.config/nvim-LazyVim/init-min.lua -c MergeIn
 
 ### Snacks (`lua/plugins/snacks.lua`)
 
-Uppercase cwd variants are repurposed to scope to the **directory of the current file** instead
+Keybinds related to 'cwd' variants are repurposed to scope to the **directory of the current file** instead
 (since root dir = cwd almost always, the cwd variants were redundant otherwise).
 
 | Key | Description |
 |-----|-------------|
-| `<leader><leader>` | Buffers picker |
-| `<leader>bb` | Buffers picker (overrides default "Switch to Other Buffer") |
-| `<leader>f,` | Find Config File (`,` used because macOS reserves it for Settings) |
 | `<leader>fF` | Find Files (file dir) — scoped to directory of current buffer |
 | `<leader>sG` | Grep (file dir) — scoped to directory of current buffer |
 | `<leader>sW` | Visual selection or word (file dir) — scoped to directory of current buffer |

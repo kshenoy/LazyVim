@@ -6,7 +6,7 @@ local opt = vim.opt
 
 -- [[ Searching ]]
 opt.hlsearch = true -- highlight all matches for the last used search pattern
-opt.grepprg = "rg --vimgrep --smart-case" -- LazyVim uses ripgrep but doesn't set smartcase
+opt.grepprg:append(" --smart-case") -- LazyVim uses ripgrep but doesn't set smartcase
 
 -- [[ Displaying text ]]
 opt.breakindent = true -- wrapped lines preserve visual indent level
